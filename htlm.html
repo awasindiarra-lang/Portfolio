@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Awa | Portfolio</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+
+body{
+  background:#0f0c29;
+  color:white;
+  overflow-x:hidden;
+  transition:0.4s;
+}
+
+body.light{
+  background:#f4f4f4;
+  color:#111;
+}
+
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+nav{
+  position:fixed;
+  top:20px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  z-index:1000;
+}
+
+nav a{
+  text-decoration:none;
+  padding:8px 20px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(10px);
+  color:white;
+  transition:0.3s;
+}
+
+body.light nav a{
+  color:#111;
+}
+
+nav a:hover{
+  transform:scale(1.1);
+}
+
+.toggle{
+  position:fixed;
+  top:20px;
+  right:20px;
+  cursor:pointer;
+  padding:8px 15px;
+  border-radius:20px;
+  background:linear-gradient(90deg,#00f5ff,#ff00c8);
+  border:none;
+  color:white;
+}
+
+section{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  padding:50px 20px;
+  text-align:center;
+}
+
+h1{
+  font-size:3rem;
+  background:linear-gradient(90deg,#00f5ff,#ff00c8);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.glass{
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(15px);
+  padding:40px;
+  border-radius:20px;
+  max-width:800px;
+  transition:0.5s;
+}
+
+.glass:hover{
+  transform:translateY(-10px);
+}
+
+img{
+  width:150px;
+  border-radius:50%;
+  margin-bottom:20px;
+  border:3px solid #00f5ff;
+}
+
+.projects{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+  width:100%;
+  max-width:900px;
+}
+
+.card{
+  padding:25px;
+  border-radius:15px;
+  background:rgba(255,255,255,0.05);
+  transition:0.4s;
+}
+
+.card:hover{
+  transform:scale(1.05);
+}
+
+.fade{
+  opacity:0;
+  transform:translateY(40px);
+  transition:1s;
+}
+
+.fade.show{
+  opacity:1;
+  transform:translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav>
+  <a href="#home">Accueil</a>
+  <a href="#about">À propos</a>
+  <a href="#projects">Projets</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<button class="toggle" onclick="toggleMode()">🌙</button>
+
+<section id="home">
+
+
+    <h1>Awa Sindiarra</h1>
+    <p id="typing"></p>
+  </div>
+</section>
+
+<section id="about">
+
+    <h2>À propos</h2>
+    <p>
+      Je commence le codage.
+      Aussi étudiante en droit.
+    </p>
+  </div>
+</section>
+
+<section id="projects">
+  <h2 class="fade">Mes Projets</h2>
+  <div class="projects">
+    <div class="card fade">
+      <h3>Mini Site HTML</h3>
+      <p>Mon premier site responsive.</p>
+    </div>
+    <div class="card fade">
+      <h3>Projet Python</h3>
+      <p>Logique et automatisation.</p>
+    </div>
+    <div class="card fade">
+      <h3>Portfolio V3</h3>
+      <p>Design premium interactif.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="glass fade">
+    <h2>Contact</h2>
+    <p>Email : awasindiarra@gmail.com</p>
+    <p>GitHub : github.com/Awasindiarra-land</p>
+  </div>
+</section>
+
+<script>
+// Typing effect
+const text = "Future développeuse 💻 | Créatrice d'expériences digitales 🚀";
+let i = 0;
+function typing(){
+  if(i < text.length){
+    document.getElementById("typing").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typing,50);
+  }
+}
+typing();
+
+// Dark/Light mode
+function toggleMode(){
+  document.body.classList.toggle("light");
+}
+
+// Scroll animation
+const faders = document.querySelectorAll(".fade");
+window.addEventListener("scroll",()=>{
+  faders.forEach(el=>{
+    const top = el.getBoundingClientRect().top;
+    if(top < window.innerHeight - 100){
+      el.classList.add("show");
+    }
+  });
+});
+
+// Particles background
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particlesArray = [];
+
+class Particle{
+  constructor(){
+    this.x = Math.random()*canvas.width;
+    this.y = Math.random()*canvas.height;
+    this.size = Math.random()*2;
+    this.speedX = Math.random()*0.5 - 0.25;
+    this.speedY = Math.random()*0.5 - 0.25;
+  }
+  update(){
+    this.x += this.speedX;
+    this.y += this.speedY;
+  }
+  draw(){
+    ctx.fillStyle = "white";
+    ctx.fillRect(this.x,this.y,this.size,this.size);
+  }
+}
+
+function init(){
+  for(let i=0;i<150;i++){
+    particlesArray.push(new Particle());
+  }
+}
+init();
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particlesArray.forEach(p=>{
+    p.update();
+    p.draw();
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
